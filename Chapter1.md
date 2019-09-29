@@ -12,9 +12,9 @@
 
 #### 설치 방법
 
-나는 맥을 사용하고 있고 brew, zsh등을 미리 설치해놓은 상태에서 시작하였다. 아직 brew, zsh를 설치하지 않았다면..! [클릭][https://beomi.github.io/2017/07/07/Beautify-ZSH/] 하여 설치를 합시다. ~~zsh를 사용하면 왠지 간지나는 개발자가 된 것 같다.~~ 
+나는 맥을 사용하고 있고 brew, zsh등을 미리 설치해놓은 상태에서 시작하였다. 아직 brew, zsh를 설치하지 않았다면..! [클릭](https://beomi.github.io/2017/07/07/Beautify-ZSH/) 하여 설치를 합시다. ~~zsh를 사용하면 왠지 간지나는 개발자가 된 것 같다.~~ 
 
-터미널 창에서  ![brew install python3](/Users/joanlee/Desktop/brew_install_python)
+터미널 창에서  ![brew install python3](../assets/brew_install_python)
 
 을 실행하면 python 설치가 완료된다. 이미 맥에서는 python2가 내장되어 있기 때문에 설치 후에도 python2가 실행되는 경우가 있다. 이를 방지하기 위해서는 
 
@@ -24,7 +24,7 @@ vim ~/.zshrc
 
 에서 수정모드 (i 버튼 클릭)로 전환 후 아래와 같이 설정해준다. 
 
-![alias 설정]()
+![alias 설정](../assets/alias)
 
 설정 후에는 esc + `:wq`버튼을 누르고 명령창에 source 해준다.
 
@@ -46,13 +46,13 @@ source ~/.zshrc
 
 아래의 이미지를 보면 조금 더 쉽게 이해할 수 있다.
 
-![pythonVSanaconda]() 
+![pythonVSanaconda](../assets/pipVSanaconda) 
 
 일반적인 파이썬이 pip만 제공한다면 아나콘다는 다양한 패키지들을 이미 갖고 있다. 용량은 크지만 패키지 관리가 용이하고 가상환경에서 작업할 수 있다는 장점이 있다. 
 
 #### 설치 방법
 
-1. anaconda [사이트][https://www.anaconda.com/distribution/] 에 접속하여 다운로드 받기
+1. anaconda [사이트](https://www.anaconda.com/distribution/)에 접속하여 다운로드 받기
 
 2. anaconda path 설정해주기 
 
@@ -60,7 +60,7 @@ source ~/.zshrc
    vim ~/.zshrc
    ```
 
-   ![]()
+   ![anaconda path](../assets/anaconda_path)
 
    ```bash
    source ~/.zshrc
