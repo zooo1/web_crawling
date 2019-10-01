@@ -1,5 +1,3 @@
-
-
 # 스크래핑 전 Chrome 개발자 도구에서 알아야 할 것들
 
 ### Dom 구조 분석(요소검사)
@@ -122,4 +120,54 @@ urlopen은 하드디스크에 쓰기 전에 이미 변수에 할당 -> 파싱 ->
 
 urlretrieve는 parsing이 필요없는 데이터를 저장할 때 유용하고 urlopen은 저장하기 전에 분석이 필요한 경우에 사용하는 것이 유용하다.
 
-# 
+
+
+# 2019.10.01
+
+# Python urllib을 활용한 웹에서 필요한 데이터 추출하기(1)
+
+`urllib.request.``urlopen`(*url*, *data=None*, [*timeout*, ]***, *cafile=None*, *capath=None*, *cadefault=False*, *context=None*)
+
+Open the URL *url*, which can be either a string or a [`Request`](https://docs.python.org/3/library/urllib.request.html#urllib.request.Request) object.
+
+*data* must be an object specifying additional data to be sent to the server, or `None` if no such data is needed. See [`Request`](https://docs.python.org/3/library/urllib.request.html#urllib.request.Request) for details.
+
+urllib.request module uses HTTP/1.1 and includes `Connection:close` header in its HTTP requests.
+
+The optional *timeout* parameter specifies a timeout in seconds for blocking operations like the connection attempt (if not specified, the global default timeout setting will be used). This actually only works for HTTP, HTTPS and FTP connections.
+
+If *context* is specified, it must be a [`ssl.SSLContext`](https://docs.python.org/3/library/ssl.html#ssl.SSLContext) instance describing the various SSL options. See [`HTTPSConnection`](https://docs.python.org/3/library/http.client.html#http.client.HTTPSConnection) for more details.
+
+The optional *cafile* and *capath* parameters specify a set of trusted CA certificates for HTTPS requests. *cafile* should point to a single file containing a bundle of CA certificates, whereas *capath* should point to a directory of hashed certificate files. More information can be found in [`ssl.SSLContext.load_verify_locations()`](https://docs.python.org/3/library/ssl.html#ssl.SSLContext.load_verify_locations).
+
+The *cadefault* parameter is ignored.
+
+This function always returns an object which can work as a [context manager](https://docs.python.org/3/glossary.html#term-context-manager) and has methods such as
+
+- `geturl()` — return the URL of the resource retrieved, commonly used to determine if a redirect was followed
+- `info()` — return the meta-information of the page, such as headers, in the form of an [`email.message_from_string()`](https://docs.python.org/3/library/email.parser.html#email.message_from_string) instance (see [Quick Reference to HTTP Headers](http://jkorpela.fi/http.html))
+- `getcode()` – return the HTTP status code of the response.
+
+For HTTP and HTTPS URLs, this function returns a [`http.client.HTTPResponse`](https://docs.python.org/3/library/http.client.html#http.client.HTTPResponse) object slightly modified. In addition to the three new methods above, the msg attribute contains the same information as the [`reason`](https://docs.python.org/3/library/http.client.html#http.client.HTTPResponse.reason) attribute — the reason phrase returned by server — instead of the response headers as it is specified in the documentation for [`HTTPResponse`](https://docs.python.org/3/library/http.client.html#http.client.HTTPResponse).
+
+For FTP, file, and data URLs and requests explicitly handled by legacy [`URLopener`](https://docs.python.org/3/library/urllib.request.html#urllib.request.URLopener) and [`FancyURLopener`](https://docs.python.org/3/library/urllib.request.html#urllib.request.FancyURLopener) classes, this function returns a `urllib.response.addinfourl` object.
+
+Raises [`URLError`](https://docs.python.org/3/library/urllib.error.html#urllib.error.URLError) on protocol errors.
+
+Note that `None` may be returned if no handler handles the request (though the default installed global [`OpenerDirector`](https://docs.python.org/3/library/urllib.request.html#urllib.request.OpenerDirector) uses [`UnknownHandler`](https://docs.python.org/3/library/urllib.request.html#urllib.request.UnknownHandler) to ensure this never happens).
+
+In addition, if proxy settings are detected (for example, when a `*_proxy` environment variable like `http_proxy` is set), [`ProxyHandler`](https://docs.python.org/3/library/urllib.request.html#urllib.request.ProxyHandler) is default installed and makes sure the requests are handled through the proxy.
+
+The legacy `urllib.urlopen` function from Python 2.6 and earlier has been discontinued; [`urllib.request.urlopen()`](https://docs.python.org/3/library/urllib.request.html#urllib.request.urlopen) corresponds to the old `urllib2.urlopen`. Proxy handling, which was done by passing a dictionary parameter to `urllib.urlopen`, can be obtained by using [`ProxyHandler`](https://docs.python.org/3/library/urllib.request.html#urllib.request.ProxyHandler) objects.
+
+*Changed in version 3.2:* *cafile* and *capath* were added.
+
+*Changed in version 3.2:* HTTPS virtual hosts are now supported if possible (that is, if [`ssl.HAS_SNI`](https://docs.python.org/3/library/ssl.html#ssl.HAS_SNI) is true).
+
+*New in version 3.2:* *data* can be an iterable object.
+
+*Changed in version 3.3:* *cadefault* was added.
+
+*Changed in version 3.4.3:* *context* was added.
+
+*Deprecated since version 3.6:* *cafile*, *capath* and *cadefault* are deprecated in favor of *context*. Please use [`ssl.SSLContext.load_cert_chain()`](https://docs.python.org/3/library/ssl.html#ssl.SSLContext.load_cert_chain) instead, or let [`ssl.create_default_context()`](https://docs.python.org/3/library/ssl.html#ssl.create_default_context) select the system’s trusted CA certificates for you.
