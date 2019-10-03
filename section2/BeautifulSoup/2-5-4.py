@@ -25,12 +25,12 @@ html = """
 soup = BeautifulSoup(html, 'html.parser')
 h1 = soup.select('div#main > h1')
 print('h1', h1)
-print('type of h1: ',type(h1))
+print('type of select: ',type(h1))
 
 h1 = soup.select_one('div#main > h1') # id는 유일하기 때문에 div를 써주지 않아도 된다. 하지만 써주는 것이 찾을 때는 도움이 되겠지
-print(h1.string)
+print(h1)
+print("type of select_one: ", type(h1))
 
 list_li = soup.select('div#main > ul.lecs > li')
 for li in list_li:
     print("li >>> ", li.string)
-

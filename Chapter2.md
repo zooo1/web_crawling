@@ -171,3 +171,62 @@ The legacy `urllib.urlopen` function from Python 2.6 and earlier has been discon
 *Changed in version 3.4.3:* *context* was added.
 
 *Deprecated since version 3.6:* *cafile*, *capath* and *cadefault* are deprecated in favor of *context*. Please use [`ssl.SSLContext.load_cert_chain()`](https://docs.python.org/3/library/ssl.html#ssl.SSLContext.load_cert_chain) instead, or let [`ssl.create_default_context()`](https://docs.python.org/3/library/ssl.html#ssl.create_default_context) select the system’s trusted CA certificates for you.
+
+
+
+# 2019.10.03
+
+# CSS selector
+
+css selector는 HTML의 요소를 찾기 위해 쓰인다. 
+
+자세한 내용과 예시는 이 [페이지](https://www.w3schools.com/cssref/trysel.asp) 를 참고하도록 하자
+
+`.class명` : 해당 클래스의 모든 요소
+
+`#id명` : 해당 아이디의 모든 요소 (아이디는 고유한 값을 지닌다.)
+
+`element1, element2, ..` : 해당하는 것들의 모든 요소
+
+`상위element 하위element ` : 상위 요소에 포함되는 모든 하위 요소
+
+`상위 element > 하위element` : 상위 요소의 **자식** 하위 요소
+
+`element1 + element2` : 각 element1 다음에 오는 element2 요소 
+
+`형제element1 ~ 형제element2` : element1의 형제인 모든 요소인 element2
+
+`*` : 모든 요소
+
+`[attribute]`: 특정 속성을 가진 모든 요소
+
+`[attr=value]` : 특정 속성이 주어진 값과 일치하는 모든 요소
+
+`[attr$=value]` : 특성 속성이 주어진 값으로 끝나는 모든 요소
+
+`[attr|=value]` : 특정 속성이 주어진 값과 같거나 주어진 값으로 시작하고 하이픈(-)이 따라붙는 모든 요소  
+
+`[attr^=value]` : 특정 속성이 주어진 값으로 시작하는 모든 요소
+
+`[attr~=value]` : 특정 속성이 주어진 값을 포함하는 모든 요소
+
+`[attr*=value]` : 특정 속성이 주어진 값을 포함하는 모든 요소
+
+`:checked` `:disabled`  `:empty`  `:focus`
+
+`element:first-child` : 특정 요소 부모의 첫 번째 자식에 해당되는 모든 요소
+
+`element::first-letter`  `element::first-line` `element:first-of-type`
+
+`element:hover` : 특정 element에 마우스를 올리는 경우 그 요소가 선택된다.
+
+`input:in-range` `input:out-of-range` `input:invalid` `input:valid`
+
+`element:last-child` : 특정 요소 부모의 마지막 자식인 모든 요소
+
+
+
+
+
+
+

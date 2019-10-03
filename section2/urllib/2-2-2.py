@@ -14,15 +14,14 @@ save_path2 = "/Users/joanlee/Downloads/index.html"
 f = dw.urlopen(img_url).read()
 f2 = dw.urlopen(html_url).read()
 
+print(f.decode('utf-8'))
+### 입출력 작업 ###
+# DB connection 작업 후에는 resource를 반납해야한다.
 save_file1 = open(save_path1, 'wb') # w: write, r: read, a: add
 save_file1.write(f)
 save_file1.close()
-# 입출력 작업, db connection 작업 후에는
-# resource 반납해야한다. (닫는 작업)
 
-# with를 벗어나는 문장에서 resource가 자동으로 반납된다.
-# close()를 사용하지 않아도 됨!
-# 간지나고 가독성이 좋으니까 이것을 쓰도록 하자 ㅎㅎ
+# with를 벗어나는 문장에서 자동으로 close()
 with open(save_path2, 'wb') as save_file2:
     save_file2.write(f2)
 
