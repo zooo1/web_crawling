@@ -46,6 +46,36 @@ sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding = 'utf-8')
 
 
 
+## library
+
+### urllib
+
+>  URLs로 작업하는 모듈을 모아놓은 패키지
+>
+> - [`urllib.request`](https://docs.python.org/3/library/urllib.request.html#module-urllib.request) : URL을 열고 읽기 위해 사용한다.
+> - [`urllib.error`](https://docs.python.org/3/library/urllib.error.html#module-urllib.error) : urllib.request에서 발생하는 예외를 포함하고 있다.
+> - [`urllib.parse`](https://docs.python.org/3/library/urllib.parse.html#module-urllib.parse) : url을 parsing 하는 데 쓰인다.
+> - [`urllib.robotparser`](https://docs.python.org/3/library/urllib.robotparser.html#module-urllib.robotparser) : robots.txt 파일을 파싱하는 데 쓰인다.
+> - 
+
+### urllib.request
+
+> 주로 http 형식의 url을 여는데 쓰이는 함수, 클래스를 정의해 놓은 모듈이다.
+
+#### urllib.request.urlopen
+
+> string 또는 request object 형태의 url을 열어준다. 
+>
+> HTTP, HTTPS URL에서는 `http.client.HTTPResponse` 객체(조금 수정된)를 반환하고 FTP, file, data URL에서는 `urllib.response.addinfourl` 객체를 반환한다. 
+>
+> 아래와 같은 메소드를 지닌다.
+
+- `geturl()` : 검색된 리소스의 url을 리턴한다. 
+- `info()` : 페이지의 헤더 같은 메타 정보를 리턴한다.
+- `getcode()` :응답에 대한 HTTP 상태 코드를 리턴한다.
+
+
+
 ## code
 
 ### ver1 - urlretrieve
@@ -61,19 +91,6 @@ save_path2 = "/Users/joanlee/Downloads/index.html"
 dw.urlretrieve(img_url, save_path)
 dw.urlretrieve(html_url, save_path2)
 ```
-
-### urllib
-
->  URLs로 작업하는 모듈을 모아놓은 패키지
->
-> - [`urllib.request`](https://docs.python.org/3/library/urllib.request.html#module-urllib.request) : URL을 열고 읽기 위해 사용한다.
-> - [`urllib.error`](https://docs.python.org/3/library/urllib.error.html#module-urllib.error) : urllib.request에서 발생하는 예외를 포함하고 있다.
-> - [`urllib.parse`](https://docs.python.org/3/library/urllib.parse.html#module-urllib.parse) : url을 parsing 하는 데 쓰인다.
-> - [`urllib.robotparser`](https://docs.python.org/3/library/urllib.robotparser.html#module-urllib.robotparser) : robots.txt 파일을 파싱하는 데 쓰인다.
-
-#### urllib.request
-
-urllib.request는 주로 http 형식의 url을 여는데 쓰이는 함수, 클래스를 정의해 놓은 모듈이다.
 
 
 
@@ -110,8 +127,6 @@ with를 벗어나는 문장에서 resource가 자동으로 반납된다. 즉, �
 
 
 
-
-
 ### urlretrieve VS urlopen
 
 urlretrieve 는 데이터를 저장 -> read 형태로 open -> 변수에 할당 -> 파싱 -> 저장
@@ -124,53 +139,90 @@ urlretrieve는 parsing이 필요없는 데이터를 저장할 때 유용하고 u
 
 # 2019.10.01
 
-# Python urllib을 활용한 웹에서 필요한 데이터 추출하기(1)
+# Python urllib을 활용한 웹에서 필요한 데이터 추출하기(2)
 
-`urllib.request.``urlopen`(*url*, *data=None*, [*timeout*, ]***, *cafile=None*, *capath=None*, *cadefault=False*, *context=None*)
+## libraray
 
-Open the URL *url*, which can be either a string or a [`Request`](https://docs.python.org/3/library/urllib.request.html#urllib.request.Request) object.
+### urllib.urlrequest.urlopen
 
-*data* must be an object specifying additional data to be sent to the server, or `None` if no such data is needed. See [`Request`](https://docs.python.org/3/library/urllib.request.html#urllib.request.Request) for details.
+* `geturl()` : 검색된 리소스의 url을 리턴
 
-urllib.request module uses HTTP/1.1 and includes `Connection:close` header in its HTTP requests.
+- `info()` : 페이지의 헤더 같은 메타 정보를 리턴한다.
+- `getcode()` :응답에 대한 HTTP 상태 코드를 리턴한다.
 
-The optional *timeout* parameter specifies a timeout in seconds for blocking operations like the connection attempt (if not specified, the global default timeout setting will be used). This actually only works for HTTP, HTTPS and FTP connections.
+* `status` : 응답에 대한 HTTP 상태 코드
+* `getheaders() `: 서버에 대한 정보를 리스트로 반환
+* `read([nBytes])`: n byte의 데이터를 바이트 문자열로 반환
+* `read.decode('utf-8')` : 사람이 읽을 수 있는 형태로 decode해줌
 
-If *context* is specified, it must be a [`ssl.SSLContext`](https://docs.python.org/3/library/ssl.html#ssl.SSLContext) instance describing the various SSL options. See [`HTTPSConnection`](https://docs.python.org/3/library/http.client.html#http.client.HTTPSConnection) for more details.
+### status
 
-The optional *cafile* and *capath* parameters specify a set of trusted CA certificates for HTTPS requests. *cafile* should point to a single file containing a bundle of CA certificates, whereas *capath* should point to a directory of hashed certificate files. More information can be found in [`ssl.SSLContext.load_verify_locations()`](https://docs.python.org/3/library/ssl.html#ssl.SSLContext.load_verify_locations).
+* 200: 성공
+* 403: 거부당함
+* 404: 페이지가 존재하지 않음
+* 500: 서버 내부 오류
 
-The *cadefault* parameter is ignored.
 
-This function always returns an object which can work as a [context manager](https://docs.python.org/3/glossary.html#term-context-manager) and has methods such as
 
-- `geturl()` — return the URL of the resource retrieved, commonly used to determine if a redirect was followed
-- `info()` — return the meta-information of the page, such as headers, in the form of an [`email.message_from_string()`](https://docs.python.org/3/library/email.parser.html#email.message_from_string) instance (see [Quick Reference to HTTP Headers](http://jkorpela.fi/http.html))
-- `getcode()` – return the HTTP status code of the response.
+### urllib.parse
 
-For HTTP and HTTPS URLs, this function returns a [`http.client.HTTPResponse`](https://docs.python.org/3/library/http.client.html#http.client.HTTPResponse) object slightly modified. In addition to the three new methods above, the msg attribute contains the same information as the [`reason`](https://docs.python.org/3/library/http.client.html#http.client.HTTPResponse.reason) attribute — the reason phrase returned by server — instead of the response headers as it is specified in the documentation for [`HTTPResponse`](https://docs.python.org/3/library/http.client.html#http.client.HTTPResponse).
+> URL string을 component(주소 스케마, 네트워크 위치, 경로) 등으로 분리, component를 URL string으로 결합, 주어진 base URL을 이용하여 상대적인 URL을 절대 URL 로 변환 시키는 표준 인터페이스를 정의한 모듈이다.
+>
+> URL parsing 함수는 url string을 component로 분리하거나 URL component를 URL string으로 합치는 데 초점을 둔다.
+>
+> * `urlparse` : URL을 6개의 컴포넌트로 분리하여 6개의 원소를 가진 튜플을 리턴한다. 
+> * `urljoin` : base url에 다른 url을 합쳐준 것을 리턴한다.
+> * `urlencode` : mapping 되는 object 또는 두 개의 요소를 가진 튜플을 string 형태로 변환한다. 두 개의 요소는 **key=value** 형태의 값을 가지게된다.
+> * 
 
-For FTP, file, and data URLs and requests explicitly handled by legacy [`URLopener`](https://docs.python.org/3/library/urllib.request.html#urllib.request.URLopener) and [`FancyURLopener`](https://docs.python.org/3/library/urllib.request.html#urllib.request.FancyURLopener) classes, this function returns a `urllib.response.addinfourl` object.
 
-Raises [`URLError`](https://docs.python.org/3/library/urllib.error.html#urllib.error.URLError) on protocol errors.
 
-Note that `None` may be returned if no handler handles the request (though the default installed global [`OpenerDirector`](https://docs.python.org/3/library/urllib.request.html#urllib.request.OpenerDirector) uses [`UnknownHandler`](https://docs.python.org/3/library/urllib.request.html#urllib.request.UnknownHandler) to ensure this never happens).
 
-In addition, if proxy settings are detected (for example, when a `*_proxy` environment variable like `http_proxy` is set), [`ProxyHandler`](https://docs.python.org/3/library/urllib.request.html#urllib.request.ProxyHandler) is default installed and makes sure the requests are handled through the proxy.
 
-The legacy `urllib.urlopen` function from Python 2.6 and earlier has been discontinued; [`urllib.request.urlopen()`](https://docs.python.org/3/library/urllib.request.html#urllib.request.urlopen) corresponds to the old `urllib2.urlopen`. Proxy handling, which was done by passing a dictionary parameter to `urllib.urlopen`, can be obtained by using [`ProxyHandler`](https://docs.python.org/3/library/urllib.request.html#urllib.request.ProxyHandler) objects.
 
-*Changed in version 3.2:* *cafile* and *capath* were added.
 
-*Changed in version 3.2:* HTTPS virtual hosts are now supported if possible (that is, if [`ssl.HAS_SNI`](https://docs.python.org/3/library/ssl.html#ssl.HAS_SNI) is true).
+## code
 
-*New in version 3.2:* *data* can be an iterable object.
+### urlopen methods
 
-*Changed in version 3.3:* *cadefault* was added.
+```python
+import urllib.request as req
 
-*Changed in version 3.4.3:* *context* was added.
+url = "http://www.encar.com"
 
-*Deprecated since version 3.6:* *cafile*, *capath* and *cadefault* are deprecated in favor of *context*. Please use [`ssl.SSLContext.load_cert_chain()`](https://docs.python.org/3/library/ssl.html#ssl.SSLContext.load_cert_chain) instead, or let [`ssl.create_default_context()`](https://docs.python.org/3/library/ssl.html#ssl.create_default_context) select the system’s trusted CA certificates for you.
+mem = req.urlopen(url)
+
+print(type(mem))
+print("geturl ", mem.geturl())
+print("status ", mem.status)
+print("headers ", mem.getheaders())
+print("info ", mem.info())
+print("code ", mem.getcode())
+print("read ", mem.read(50).decode("utf-8")) # euc-kr
+```
+
+
+
+### urllib.parse.urlencode
+
+```python
+from urllib.parse import urlencode
+
+API = "https://www.ipify.org"
+values = {
+    'format': 'json'
+
+print('before', values)
+params = urlencode(values)
+print(params)
+
+url = API + "?" + params
+print("요청 url: ", url)
+
+req_data = req.urlopen(url).read().decode('utf-8')
+print(req_data)
+
+```
 
 
 
