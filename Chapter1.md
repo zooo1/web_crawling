@@ -71,7 +71,7 @@ source ~/.zshrc
 ```bash
 conda create --name(-n) [가상환경 이름] [설치할 패키지 ex)python=3.6]
 conda info -envs
-activate [가상환경이름]
+source activate [가상환경이름]
 conda update conda
 conda list
 pip install -ignore-installed [패키지 이름]
