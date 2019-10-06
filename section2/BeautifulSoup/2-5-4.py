@@ -6,8 +6,7 @@ sys.stdout = io.TextIOWrapper(sys.stdout.detach(), encoding='utf-8')
 sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding = 'utf-8')
 
 ############# CSS selector ################
-# 스크래핑에서 가장 많이 사용하는 방법이다.
-# 구글에서 css 선택자 -> 원하는 것 하나 클릭해서 읽어보세용
+
 html = """
 <html><body>
 <div id="main">
@@ -34,3 +33,5 @@ print("type of select_one: ", type(h1))
 list_li = soup.select('div#main > ul.lecs > li')
 for li in list_li:
     print("li >>> ", li.string)
+one_li = soup.select_one('div#main > ul.lecs > li')
+print(one_li)

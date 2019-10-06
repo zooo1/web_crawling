@@ -278,6 +278,213 @@ css selector는 HTML의 요소를 찾기 위해 쓰인다.
 
 
 
+# BeautifulSoup 사용법 및 간단 웹 파싱 기초(1)
+
+## BeautifulSoup
+
+~~예쁜 국물~~
+
+> HTML, XML 파일의 데이터를 추출하는 데 사용하는 파이썬 라이브러리이다.
+
+
+
+### 설치 방법 
+
+![bs4 install](./assets/bs4.png)
+
+
+
+### 사용 방법
+
+``` python
+from bs4 import BeautifulSoup
+```
+
+BeautifulSoup 객체를 import
+
+
+
+### 데이터 구조 파악하기
+
+```python
+from bs4 import BeautifulSoup
+
+html_doc = """
+<html>
+<body>
+<h1>파이썬 BeautifulSoup 공부</h1>
+<p>태그 선택자</p>
+<p>CSS 선택자</p>
+</body>
+</html>
+"""
+
+soup = BeautifulSoup(html_doc, 'html_parser')
+```
+
+soup => string 형태의 html_doc 을 html_parser를 이용하여 파싱한 형태
+
+
+
+#### type, prettify, string
+
+``` python
+type(soup) 								# <class 'bs4.BeautifulSoup'>
+soup											# html_doc 내용
+soup.prettify()						# html_doc 내용 indenting 되어서 나옴
+h1 = soup.html.body.h1		# 데이터에 접근하는 방식
+h1.type										# <class 'bs4.element.Tag'> 
+h1 												# <h1>파이썬 BeautifulSoup 공부</h1>
+h1.string									# 파이썬 BeautifulSoup 공부
+
+```
+
+#### next_sibling, prev_sibling
+
+```python
+p1 = soup.html.body.p			# 데이터에 접근하는 방식
+p1												# <p>태그 선택자</p>
+p2 = p1.next_sibling			# 다음 요소에 접근하는 방법		
+p2												# ' '			
+
+#### 해결방안(번거로움) ####
+p2 = p1.next_sibling.next_sibling  # <p>CSS 선택자</p>
+p3 = p1.previous_sibling.next_sibling  # <p>태그 선택자</p>
+```
+
+예상되는 p2 값은  `<p>css 선택자<p>` 이지만 아무것도 출력되지 않는다. html_doc을 작성할 때, 엔터키를 치지 않았더라면 예상 값이 p2의 값이 되었을 것이다. 엔터키를 치면 우리 눈에는 보이지 않는  `\n`  키가 p2에 할당된다. 이것을 해결하기 위해서는 공백을 없애주는 작업을 거쳐야한다. 
+
+
+
+## library
+
+### find_all(name, attrs, recursive, string, limit, **kwargs)
+
+> 필터에 걸러지는 모든 자손들을 찾아주는 메소드이다. 이 모든 자손들을 모아 리스트 형태로 리턴한다.
+>
+> 이것은 굉장히 대중적인 메소드이기 때문에 아래와 같이 줄여서 사용할 수 있다. 
+>
+> ```python
+> soup.find_all('a')
+> soup('a')
+> ```
+
+#### find_all()의 filter 종류
+
+* 문자열(string) 
+
+  ```python
+  soup.find_all('b')	# [<b>The Dormouse's story</b>]
+  ```
+
+* 정규표현식(regular expression)
+
+  ```python
+  import re
+  for tag in soup.find_all(re.compile("^b")):
+      print(tag.name)
+  # body
+  # b
+  ```
+
+* 리스트(list)
+
+  ```python
+  soup.find_all(["a", "b"])
+  # [<b>The Dormouse's story</b>, <a class="sister" href="http://example.com/tillie" id="link3">Tillie</a>]
+  ```
+
+* True
+
+  ```python
+  for tag in soup.find_all(True):
+    print(tag.name)
+  # html
+  # head
+  # title
+  # body
+  # p
+  # b
+  ```
+
+* 함수(function)
+
+  ```python
+  def has_class_but_no_id(tag):
+    return tag.has_attr('class') and not tag.has_attr('id')
+  
+  soup.find_all(has_class_but_not_id)
+  # [<p class="title"><b>The Dormouse's story</b></p>, <p class="story">...</p>]
+  ```
+
+  
+
+### select([tag name]), select_one([tag name])
+
+> * select : tag name에 해당하는 요소들을 모아 리스트 형태로 리턴한다.
+> * select_one: 한 개만 리턴한다.
+
+```python
+from bs4 import BeautifulSoup
+html = """
+<html><body>
+<div id="main">
+  <h1>강의목록</h1>
+  <ul class="lecs">
+    <li>Java 초고수 되기</li>
+    <li>파이썬 기초 프로그래밍</li>
+    <li>파이썬 머신러닝 프로그래밍</li>
+    <li>안드로이드 블루투스 프로그래밍</li>
+  </ul>
+</div>
+</body></html>
+"""
+
+soup = BeautifulSoup(html, 'html_parser')
+list_li = soup.select('div#main > ul.lecs > li')
+# [<li>Java 초고수 되기</li>, <li>파이썬 기초 프로그래밍</li>, <li>파이썬 머신러닝 프로그래밍</li>, <li>안드로이드 블루투스 프로그래밍</li>]
+one_li = soup.select_one('div#main > ul.lecs > li')
+# <li>Java 초고수 되기</li>
+```
+
+
+
+## code 
+
+```python
+  
+from bs4 import BeautifulSoup
+
+html = """
+<html><body>
+<div id="main">
+  <h1>강의목록</h1>
+  <ul class="lecs">
+    <li>Java 초고수 되기</li>
+    <li>파이썬 기초 프로그래밍</li>
+    <li>파이썬 머신러닝 프로그래밍</li>
+    <li>안드로이드 블루투스 프로그래밍</li>
+  </ul>
+</div>
+</body></html>
+"""
+
+soup = BeautifulSoup(html, 'html.parser')
+h1 = soup.select('div#main > h1')
+print('h1', h1)
+print('type of select: ',type(h1))
+
+h1 = soup.select_one('div#main > h1') # id는 유일하기 때문에 div를 써주지 않아도 된다.
+print(h1)
+print("type of select_one: ", type(h1))
+
+list_li = soup.select('div#main > ul.lecs > li')
+for li in list_li:
+    print("li >>> ", li.string)
+```
+
+
+
 
 
 

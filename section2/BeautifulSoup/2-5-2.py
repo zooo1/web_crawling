@@ -20,7 +20,7 @@ soup = BeautifulSoup(html, 'html.parser')
 
 print('soup type: ', type(soup))
 print('soup: \n', soup)
-print('prettified: \n', soup.prettify)
+print('prettified: \n', soup.prettify())
 
 h1 = soup.html.body.h1
 print('type of h1: ', type(h1)) # <class 'bs4.element.Tag'>
